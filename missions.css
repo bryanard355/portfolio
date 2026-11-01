@@ -28,11 +28,10 @@
   display: grid; grid-template-rows: auto 1fr; /* visual on top, text below */
   border: 1px solid var(--m-line); background: var(--m-card);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  /* the hover lift uses translate, not transform: missions.js animates the cards' transform as they come in */
+  /* the hover lift uses translate, not transform: missions.js moves the cards with their transform as they come and go */
   transition: border-color .3s, translate .4s cubic-bezier(.2, .7, .2, 1);
 }
-/* !important: GSAP writes translate: none on the cards while it animates their transform */
-.m-card:hover { border-color: var(--m-blue); translate: 0 -6px !important; }
+.m-card:hover { border-color: var(--m-blue); translate: 0 -6px; }
 
 .m-visual {
   position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--m-line);

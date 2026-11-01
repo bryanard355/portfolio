@@ -31,15 +31,16 @@
   /* the hover lift uses translate, not transform: missions.js animates the cards' transform as they come in */
   transition: border-color .3s, translate .4s cubic-bezier(.2, .7, .2, 1);
 }
-.m-card:hover { border-color: var(--m-blue); translate: 0 -6px; }
+/* !important: GSAP writes translate: none on the cards while it animates their transform */
+.m-card:hover { border-color: var(--m-blue); translate: 0 -6px !important; }
 
 .m-visual {
   position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--m-line);
   background: radial-gradient(circle at 70% 120%, rgba(30, 144, 255, .35), transparent 60%), #03040d;
 }
 .m-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
-.m-tag { position: absolute; top: 12px; left: 12px; padding: 4px 7px; background: var(--m-blue); color: #fff; font-size: 10px; line-height: 1.2; }
-.m-caption { position: absolute; left: 12px; bottom: 10px; color: #fff; font-size: 10px; }
+.m-tag { position: absolute; top: 12px; left: 12px; padding: 4px 7px; background: var(--m-blue); color: var(--m-text); font-size: 10px; line-height: 1.2; }
+.m-caption { position: absolute; left: 12px; bottom: 10px; color: var(--m-text); font-size: 10px; }
 
 .m-body { display: flex; flex-direction: column; gap: 12px; padding: 20px; }
 .m-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
@@ -58,3 +59,15 @@
   display: flex; gap: 28px; width: max-content; padding-left: var(--gutter); will-change: transform;
 }
 .missions.is-live .m-card { flex: none; width: min(480px, 80vw); }
+/* Arriving (missions.js adds these): a light line opens across the top edge, with a soft glow under it,
+   and the heading rises out of a mask word by word */
+.m-edge, .m-glow { position: absolute; pointer-events: none; }
+.m-edge {
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--m-blue) 25%, #fff 50%, var(--m-blue) 75%, transparent);
+  box-shadow: 0 0 18px 2px rgba(30, 144, 255, .55);
+}
+.m-glow { inset: 0; background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(30, 144, 255, .16), transparent 70%); }
+/* the padding lets the mask reach below the letters (the p in "completed"); the negative margin keeps the line height */
+.m-word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .14em; margin-bottom: -.14em; }
+.m-word > span { display: inline-block; }

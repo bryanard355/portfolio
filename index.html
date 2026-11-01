@@ -12,16 +12,11 @@
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
-<!-- ===== Welcome screen (see welcome.js): shown first, then it flies away and reveals the page =====
-     Edit the words here. The particle word is WORD at the top of welcome.js. -->
-<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcome-h" tabindex="-1">
+<!-- ===== Welcome screen (see welcome.js): particles form a word for 2 seconds, then fly apart and reveal the page =====
+     The word and the timing are at the top of welcome.js. -->
+<div class="welcome" id="welcome" aria-hidden="true">
   <div class="welcome-bg"></div>
-  <canvas class="welcome-canvas" aria-hidden="true"></canvas>
-  <div class="welcome-copy">
-    <h2 class="welcome-title" id="welcome-h"><span class="sr-only">Welcome. </span>Hi, I’m <span class="welcome-name">Bryan Owusu-Ansah</span></h2>
-    <button type="button" class="welcome-enter">Enter the site</button>
-    <p class="welcome-hint mono">or scroll ↓</p>
-  </div>
+  <canvas class="welcome-canvas"></canvas>
 </div>
 
 <!-- ===== Menu (opened by the ☰ button in the header, see script.js) ===== -->

@@ -46,47 +46,21 @@ a:hover { color: #fff; }
 }
 
 /* ===== Welcome screen (welcome.js) ===== */
-/* Covers the page until the visitor enters; it sits just under the grain so the film texture covers it too.
-   Only shown when JS runs, and if welcome.js never starts it hides itself after 4s so the page can't get stuck. */
+/* Covers the page for a moment when it loads; it sits just under the grain so the film texture covers it too.
+   Only shown when JS runs, and if welcome.js never starts it hides itself after 3s so the page can't get stuck. */
 .welcome { display: none; }
-.js .welcome {
-  position: fixed; inset: 0; z-index: 40; display: flex; flex-direction: column; justify-content: center; align-items: center;
-  /* --word-space (set by welcome.js) leaves room above the words for the particle "WELCOME", so the two are centred together */
-  padding: var(--word-space, 0px) var(--gutter) 0; text-align: center; overflow: hidden;
-}
+.js .welcome { display: block; position: fixed; inset: 0; z-index: 40; overflow: hidden; }
 .js .welcome[hidden] { display: none; }
-.welcome:focus { outline: none; } /* focused only so screen readers announce it; the button shows the focus ring */
-.js:not(.welcome-ready) .welcome { animation: welcome-failsafe 0s 6s forwards; }
+.js:not(.welcome-ready) .welcome { animation: welcome-failsafe 0s 3s forwards; }
 @keyframes welcome-failsafe { to { visibility: hidden; } }
 .welcome-bg { position: absolute; inset: 0; background: var(--bg); }
 .welcome-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.welcome-copy { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 960px; }
-/* the lines rise in one after another: --d is each one's delay */
-.welcome-copy > * {
-  margin: 0; opacity: 0; transform: translateY(18px);
-  transition: opacity .8s var(--d, 0s), transform .9s cubic-bezier(.2,.7,.2,1) var(--d, 0s);
-}
-.welcome.is-ready .welcome-copy > * { opacity: 1; transform: none; }
-.welcome-copy > :nth-child(2) { --d: .12s; }
-.welcome-copy > :nth-child(3) { --d: .24s; }
-.welcome-title { font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(20px, 3vw, 44px); line-height: 1.05; }
-.welcome-name { white-space: nowrap; } /* keeps "Owusu-Ansah" from breaking at the hyphen */
-.welcome-enter {
-  margin-top: 10px; min-height: 44px; padding: 14px 22px; border: 0; background: var(--accent); color: var(--bg); cursor: pointer;
-  font: inherit; font-size: 13px; font-weight: 800; font-stretch: 125%; text-transform: uppercase; letter-spacing: .02em;
-  transition: opacity .8s var(--d, 0s), transform .9s cubic-bezier(.2,.7,.2,1) var(--d, 0s), background .25s; /* keeps the rise-in */
-}
-.welcome-enter:hover { background: var(--fg); }
-.welcome-enter:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
-.welcome-hint { font-size: 11px; text-transform: uppercase; color: var(--muted); }
-/* Leaving: the words go first, the particles fly past (welcome.js), then the background fades away */
+/* Leaving: the particles fly past (welcome.js), then the background fades away */
 .welcome.is-leaving { pointer-events: none; }
-.welcome-copy, .welcome-bg, .welcome-canvas { transition: opacity .45s, transform .6s cubic-bezier(.2,.7,.2,1); }
-.welcome.is-leaving .welcome-copy { opacity: 0; transform: translateY(-24px); }
 .welcome.is-leaving .welcome-bg { opacity: 0; transition: opacity .9s .4s; }
 .welcome.is-leaving .welcome-canvas { opacity: 0; transition: opacity .5s .8s; }
 @media (prefers-reduced-motion: reduce) {
-  .welcome-copy > *, .welcome.is-leaving .welcome-bg, .welcome.is-leaving .welcome-canvas { transition: opacity .3s; transform: none; }
+  .welcome.is-leaving .welcome-bg, .welcome.is-leaving .welcome-canvas { transition: opacity .3s; }
 }
 
 /* ===== Header ===== */

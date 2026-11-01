@@ -1,9 +1,8 @@
 // ===== Welcome screen =====
 // Shown before the page: thousands of particles swirl in like a galaxy and assemble into a 3D "WELCOME"
-// that leans with the cursor and parts around it. "Enter the site", a scroll or swipe down, or the Enter key
-// sends the particles rushing past the camera while the page fades in behind them.
-// The words are HTML in index.html (#welcome). script.js waits for window.welcomeDone before it plays the
-// hero, so your name animates in as the welcome leaves.
+// that leans with the cursor and parts around it. After SHOW seconds (sooner on a scroll, a swipe or a key)
+// the particles rush past the camera while the page fades in behind them.
+// script.js waits for window.welcomeDone before it plays the hero, so your name animates in as the welcome leaves.
 // Loads right after three.js and before the rest of the page's scripts, so the particles start straight away.
 // Wrapped in its own scope so its names can't clash with script.js.
 (() => {
@@ -13,8 +12,9 @@
   const PHONE = window.matchMedia('(max-width: 720px)').matches;
   const PARTICLES = PHONE ? 7000 : 15000; // particles that form the word
   const DUST = PHONE ? 900 : 2000;        // particles that stay behind as drifting stars
-  const ASSEMBLE = 2.6;            // seconds the particles take to form the word
-  const LEAVE = 1.3;               // seconds the fly-through takes once the visitor enters
+  const ASSEMBLE = 1.4;            // seconds the particles take to form the word
+  const SHOW = 2;                  // seconds from the word starting to form until the site opens by itself
+  const LEAVE = 1.3;               // seconds the fly-through takes once the site opens
 
   const root = document.documentElement;
   const el = document.getElementById('welcome');
@@ -32,18 +32,15 @@
   }
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const button = el.querySelector('.welcome-enter');
   const canvas = el.querySelector('.welcome-canvas');
-  const copy = el.querySelector('.welcome-copy');
   const listeners = new AbortController(); // every listener below goes away together once the welcome is gone
   const on = (target, type, fn, opts = {}) => target.addEventListener(type, fn, { ...opts, signal: listeners.signal });
   let leaving = false, leftAt = 0, particles = null;
-  let scrollFrom = Infinity; // scrolling only lets the visitor in once the words have been on screen for a moment
+  const scrollFrom = performance.now() + 500; // so the tail of a scroll from before the page loaded can't skip it
   root.classList.add('welcome-open');
   if (page) page.inert = true; // the page underneath can't be tabbed into while it's covered
-  el.focus({ preventScroll: true }); // screen readers announce the welcome; Tab then reaches the button
 
-  // ===== Entering: the button, a scroll or swipe down, or Enter / Space / ↓ / Esc =====
+  // ===== Entering: by itself after SHOW seconds, or sooner on a scroll or swipe down, or Enter / Space / ↓ / Esc =====
   function enter() {
     if (leaving) return;
     leaving = true;
@@ -58,7 +55,6 @@
       listeners.abort();
     }, reduced ? 400 : LEAVE * 1000 + 300);
   }
-  on(button, 'click', enter);
   // Scrolling down means "let me in". Until the welcome is gone the page underneath doesn't scroll,
   // or the rest of a trackpad flick would carry the visitor straight past the hero.
   on(window, 'wheel', (e) => {
@@ -79,21 +75,14 @@
     else if (['ArrowUp', 'PageUp', 'Home'].includes(e.key)) e.preventDefault();
   });
 
-  // The words come in while the particles are still forming the word (with reduced motion, straight away)
-  function showWords() {
-    el.classList.add('is-ready');
-    scrollFrom = performance.now() + 500;
-  }
-  if (reduced) showWords();
-  else setTimeout(showWords, 1100);
-
-  // three.js is loaded just before this file (if it failed to load, the words on their own are fine)
+  // three.js is loaded just before this file. Without it (or without WebGL) there's nothing to show: open the site
   if (window.THREE) particles = makeParticles(window.THREE);
+  if (!particles) enter();
 
   // ===== The particles =====
   function makeParticles(THREE) {
     const gl = canvas.getContext('webgl2', { alpha: true, antialias: false, powerPreference: 'high-performance' });
-    if (!gl) return null; // no WebGL: the words on their own are fine
+    if (!gl) return null;
     THREE.ColorManagement.enabled = false; // hex colours then render exactly like the CSS ones
     const renderer = new THREE.WebGLRenderer({ canvas, context: gl, alpha: true });
     renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
@@ -125,11 +114,11 @@
     const mat = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 }, uProgress: { value: reduced ? 1 : 0 }, uExit: { value: 0 },
-        uSize: { value: 2 }, uPixelRatio: { value: 1 }, uCam: { value: CAM }, uAspect: { value: 1 }, uLift: { value: 0 },
+        uSize: { value: 2 }, uPixelRatio: { value: 1 }, uCam: { value: CAM }, uAspect: { value: 1 },
         uMouse: { value: new THREE.Vector2(9, 9) }, uMouseOn: { value: 0 }, uPush: { value: 0.5 },
       },
       vertexShader: `
-        uniform float uTime, uProgress, uExit, uSize, uPixelRatio, uCam, uAspect, uMouseOn, uPush, uLift;
+        uniform float uTime, uProgress, uExit, uSize, uPixelRatio, uCam, uAspect, uMouseOn, uPush;
         uniform vec2 uMouse;
         attribute vec3 aTarget, aColor;
         attribute vec4 aRand;
@@ -152,9 +141,8 @@
           float push = (1.0 - smoothstep(0.0, 0.3, length(d))) * uMouseOn * uPush;
           mv.xy += normalize(d + 1e-4) * push;
           mv.z += push * 1.5;
-          // entering: everything drifts to the middle of the screen and bursts outwards past the camera
+          // entering: everything bursts outwards past the camera
           float x = clamp((uExit - aRand.w * 0.35) / 0.65, 0.0, 1.0);
-          mv.y -= uLift * min(x * 2.0, 1.0);
           mv.xy *= 1.0 + x * x * 0.6;
           mv.z += x * x * (uCam + 4.0) * (0.8 + aRand.w * 0.6);
           gl_Position = projectionMatrix * mv;
@@ -234,17 +222,12 @@
       camera.updateProjectionMatrix();
       const viewH = 2 * CAM * Math.tan((35 / 2) * (Math.PI / 180)), viewW = viewH * camera.aspect;
       const s = Math.min(viewW * (PHONE ? 0.9 : 0.74), (viewH * 0.26) / wordRatio); // word width in 3D units
-      group.scale.setScalar(s);
-      // The word sits just above the words: the CSS makes room for it (--word-space), then it goes in that room
-      const wordH = ((s * wordRatio) / viewH) * h, gap = Math.min(Math.max(h * 0.035, 18), 36);
-      el.style.setProperty('--word-space', `${Math.round(wordH + gap)}px`);
-      group.position.y = viewH * (0.5 - (copy.offsetTop - gap - wordH / 2) / h);
+      group.scale.setScalar(s); // (the word sits in the middle of the screen)
       const u = mat.uniforms, wordPx = (s / viewW) * w;
       u.uSize.value = Math.min(Math.max(Math.sqrt((wordPx * wordPx * 0.05) / PARTICLES) * 1.15, 1.3), 3.2);
       u.uPixelRatio.value = renderer.getPixelRatio();
       u.uAspect.value = camera.aspect;
       u.uPush.value = s * 0.07;
-      u.uLift.value = group.position.y;
       if (reduced && formingSince !== null) renderer.render(scene, camera); // still frame, once the word is placed
     }
 
@@ -285,6 +268,7 @@
       if (leaving) return;
       placeWord();
       formingSince = performance.now();
+      setTimeout(enter, SHOW * 1000);
       if (reduced) { glow.material.opacity = 0.3; renderer.render(scene, camera); }
     });
     if (!reduced) raf = requestAnimationFrame(frame);

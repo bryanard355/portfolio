@@ -30,7 +30,7 @@
   ];
   // 3D colours come from the theme variables in style.css (:root), so the scene always matches the page
   const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  const COLOR = { bg: cssVar('--bg'), dots: cssVar('--fg'), red: cssVar('--accent'), soft: cssVar('--fg') };
+  const COLOR = { bg: cssVar('--bg'), dots: cssVar('--fg'), accent: cssVar('--accent'), soft: cssVar('--fg') };
 
   const motionToggle = document.getElementById('motion-toggle'); // script.js sets aria-pressed="false" while paused
   const clamp01 = (n) => Math.min(Math.max(n, 0), 1);
@@ -147,15 +147,15 @@
       return new THREE.LineSegments(g, lineMat(color, opacity));
     };
     const code = (w, h, rows, z, seed) => { // rows of "code": indented lines of different lengths
-      const soft = [], red = [];
+      const soft = [], accent = [];
       for (let r = 0; r < rows; r++) {
         const y = h / 2 - 0.12 - r * ((h - 0.2) / rows);
         const x0 = -w / 2 + 0.08 + [0, 1, 2, 1, 2, 3, 1, 0][(r + seed) % 8] * 0.07;
         const x1 = Math.min(x0 + 0.25 + (((r * 7 + seed * 3) % 5) / 5) * w * 0.55, w / 2 - 0.08);
-        ((r + seed) % 3 === 0 ? red : soft).push([x0, y, z, x1, y, z]);
+        ((r + seed) % 3 === 0 ? accent : soft).push([x0, y, z, x1, y, z]);
       }
       const g = new THREE.Group();
-      g.add(lines(soft, COLOR.soft, 0.55), lines(red, COLOR.red, 0.95));
+      g.add(lines(soft, COLOR.soft, 0.55), lines(accent, COLOR.accent, 0.95));
       return g;
     };
     const part = (obj, x, y, z, { rx = 0, ry = 0, float = false } = {}) => {
@@ -170,7 +170,7 @@
       });
       scene.add(obj);
     };
-    const R = COLOR.red, W = COLOR.soft;
+    const R = COLOR.accent, W = COLOR.soft;
 
     // Server rack: the frame, then seven units from the bottom up (vents + two status lights each)
     part(box(1.2, 2.5, 1, R, 0.95), -1.25, 1.25, 0);
@@ -215,9 +215,9 @@
     lock.add(box(0.34, 0.27, 0.1, R, 1), lines(shackle, R, 1), lines([[0, 0.03, 0.051, 0, -0.07, 0.051]], W, 0.9));
     part(lock, 0.6, 3.25, -0.45, { float: true });
 
-    // The floor: a fine grid plus a coarser red one
+    // The floor: a fine grid plus a coarser blue one
     const minor = new THREE.GridHelper(60, 120, COLOR.soft, COLOR.soft);
-    const major = new THREE.GridHelper(60, 30, COLOR.red, COLOR.red);
+    const major = new THREE.GridHelper(60, 30, COLOR.accent, COLOR.accent);
     const gridMats = [];
     for (const [grid, opacity] of [[minor, 0.2], [major, 0.42]]) {
       Object.assign(grid.material, { transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
@@ -367,7 +367,7 @@
     if (motionToggle) new MutationObserver(kick).observe(motionToggle, { attributeFilter: ['aria-pressed'] });
     new ResizeObserver(() => { resize(); kick(); }).observe(canvas);
 
-    // Progress bar: 4 blocks per stage fill in red, the current stage's label lights up
+    // Progress bar: 4 blocks per stage fill in blue, the current stage's label lights up
     let lastScene = '';
     function progress(p) {
       let from = 0, active = 0;

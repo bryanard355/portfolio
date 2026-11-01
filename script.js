@@ -1,7 +1,7 @@
 // ===== Settings =====
 const PARTICLES = window.innerWidth < 700 ? 6000 : 9000; // fewer on phones
-const DOT_COLOR = '237,237,237';
-const RING_COLOR = '232,34,27'; // the shockwave when you tap the name (the accent red)
+const DOT_COLOR = '242,245,251';
+const RING_COLOR = '30,144,255'; // the shockwave when you tap the name (the accent blue)
 const RIPPLE_SPEED = 7;   // how fast the shockwave spreads, in name-heights per second
 const RIPPLE_LIFE = 1.4;  // seconds
 
@@ -100,7 +100,7 @@ function renderScene(now) {
       const dx = px - r.x, dy = py - r.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
       const g = Math.exp(-(((d - r.at) / band) ** 2)) * r.push;
       px += dx / d * g; py += dy / d * g;
-      if (g > Math.max(1.5, r.push * 0.5)) b = 4; // the crest of the wave turns red
+      if (g > Math.max(1.5, r.push * 0.5)) b = 4; // the crest of the wave turns blue
     }
     buckets[b].push(px, py, f);
   }
@@ -177,7 +177,7 @@ function kernName() {
 }
 
 // v: 0 = at rest, 1 = fully squeezed. drop: how far (%) the letter has sunk back into its mask (below 0: jumped out of it).
-// lit: 0 = accent red, 1 = white.
+// lit: 0 = accent blue, 1 = white.
 function shapeChar(c, v, drop, lit = 0) {
   c.shown = v;
   c.drop = drop;

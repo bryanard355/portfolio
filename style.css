@@ -1,10 +1,10 @@
-/* ===== Theme — change the accent here ===== */
+/* ===== Theme — the logo's colours (logo.png): blue, off-white and near-black ===== */
 :root {
-  --accent: #E8221B;
-  --bg: #000;
-  --fg: #EDEDED;
-  --muted: #9A9A9A;
-  --line: #2A2A2A;
+  --accent: #1E90FF;
+  --bg: #000106;
+  --fg: #F2F5FB;
+  --muted: #8A93A6;
+  --line: #252B3A;
   --gutter: clamp(16px, 4vw, 48px);
   /* Selected works / clients / years (the tech-showcase look) */
   --blue: #1E90FF;
@@ -27,7 +27,6 @@ body {
   font-family: 'Archivo', system-ui, sans-serif;
 }
 a { color: var(--fg); text-decoration: none; }
-a:hover { color: #fff; }
 
 /* clip, not hidden: "hidden" would stop the hero from staying pinned (older browsers fall back to hidden) */
 .page { position: relative; min-height: 100vh; overflow-x: hidden; overflow-x: clip; }
@@ -161,7 +160,7 @@ a:hover { color: #fff; }
 /* ===== Selected works (works.js) ===== */
 /* Without GSAP the projects are a plain stacked list. works.js adds .is-live to pin the section and play it
    as scenes, one screen of scrolling per project. */
-.works { position: relative; background: var(--bg); color: #fff; font-family: var(--wf); }
+.works { position: relative; background: var(--bg); color: var(--fg); font-family: var(--wf); }
 .w-ui { margin: 0; font-family: var(--wf); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ui-gray); }
 .works-stage { position: relative; padding: clamp(88px, 10vw, 140px) var(--gutter) clamp(56px, 7vw, 100px); }
 .w-top { display: flex; justify-content: space-between; margin-bottom: 40px; }
@@ -189,7 +188,7 @@ a:hover { color: #fff; }
 }
 .works.is-live .works-stage { height: 100vh; height: 100svh; padding: 0; overflow: hidden; }
 .is-live .w-top { position: absolute; z-index: 3; top: max(9vh, 72px); left: var(--gutter); right: var(--gutter); margin: 0; }
-.is-live .w-count { display: block; color: #fff; }
+.is-live .w-count { display: block; color: var(--fg); }
 .is-live .w-glow {        /* soft blue light behind the visuals */
   display: block; position: absolute; inset: calc(var(--w-top) - 10vh) 0 calc(var(--w-bottom) - 10vh); pointer-events: none;
   background: radial-gradient(50% 50% at 50% 50%, rgba(30, 144, 255, .2), rgba(30, 144, 255, .05) 55%, transparent 75%);
@@ -252,14 +251,14 @@ a:hover { color: #fff; }
 .w-tab::before, .w-tab::after { content: ""; position: absolute; left: 0; right: 0; top: 9px; height: 14px; background: var(--seg-off); }
 .w-tab::after { background: var(--blue); transform: scaleX(var(--fill, 0)); transform-origin: left; }
 .w-tab > span { position: relative; z-index: 1; }
-.w-tab.is-active, .w-tab:hover { color: #fff; }
+.w-tab.is-active, .w-tab:hover { color: var(--fg); }
 .w-tab:focus-visible { outline: 1px solid var(--blue); outline-offset: 2px; }
 
 /* View project: follows the scene on screen */
 .is-live .w-cta { display: flex; align-items: center; gap: 14px; position: absolute; z-index: 3; right: var(--gutter); bottom: max(22px, 3.2vh); }
-.w-cta-label { font: 600 11px var(--wf); letter-spacing: .08em; text-transform: uppercase; color: #fff; }
+.w-cta-label { font: 600 11px var(--wf); letter-spacing: .08em; text-transform: uppercase; color: var(--fg); }
 .w-cta-btn {
-  display: grid; place-items: center; width: 40px; height: 40px; color: #fff;
+  display: grid; place-items: center; width: 40px; height: 40px; color: var(--fg);
   border: 1px solid rgba(255, 255, 255, .35); transition: border-color .3s, background-color .3s;
 }
 .w-cta-btn svg { transition: transform .35s cubic-bezier(.2,.7,.2,1); }
@@ -271,8 +270,8 @@ a:hover { color: #fff; }
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: clamp(32px, 5vw, 80px); align-items: end;
   padding: clamp(88px, 11vw, 160px) var(--gutter) clamp(64px, 8vw, 120px); font-family: var(--wf);
 }
-.clients-num { margin: 18px 0 12px; font-weight: 800; font-size: clamp(72px, 10vw, 160px); line-height: .85; letter-spacing: -.05em; color: #fff; }
-.clients-what { color: #fff; }
+.clients-num { margin: 18px 0 12px; font-weight: 800; font-size: clamp(72px, 10vw, 160px); line-height: .85; letter-spacing: -.05em; color: var(--fg); }
+.clients-what { color: var(--fg); }
 .clients-note { margin: 22px 0 0; max-width: 32ch; font-size: 15px; line-height: 1.5; color: var(--ui-gray); }
 .clients-grid {
   list-style: none; margin: 0; padding: 1px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px;
@@ -299,7 +298,7 @@ a:hover { color: #fff; }
   background: radial-gradient(closest-side, rgba(30, 144, 255, .3), rgba(30, 144, 255, .08) 55%, transparent);
 }
 .years-num {
-  position: relative; font-weight: 800; font-size: clamp(180px, 36vw, 560px); line-height: .8; letter-spacing: -.06em; color: #fff;
+  position: relative; font-weight: 800; font-size: clamp(180px, 36vw, 560px); line-height: .8; letter-spacing: -.06em; color: var(--fg);
   font-variant-numeric: tabular-nums;
 }
 .years-label { position: relative; flex: 1; max-width: 160px; }
@@ -356,7 +355,7 @@ a:hover { color: #fff; }
 .p-step { padding: 22px 0; border-bottom: 1px solid var(--line); }
 .p-num { font-size: 12px; text-transform: uppercase; color: var(--accent); }
 .p-step h3 { margin: 8px 0; font-weight: 800; font-size: clamp(20px, 2.6vw, 38px); line-height: 1; }
-.p-step p { margin: 0; max-width: 46ch; font-size: 15px; line-height: 1.55; color: #c9c9c5; }
+.p-step p { margin: 0; max-width: 46ch; font-size: 15px; line-height: 1.55; color: #C5CCDA; }
 .p-outro { margin-top: clamp(56px, 7vw, 100px); }
 .p-final { margin: 0; color: var(--accent); font-size: clamp(44px, 9vw, 160px); line-height: .85; letter-spacing: -.01em; }
 .p-progress { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 8px 24px; margin-top: 40px; }

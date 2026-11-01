@@ -92,7 +92,7 @@
     const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
     camera.position.z = CAM;
     const cssVar = (name) => getComputedStyle(root).getPropertyValue(name).trim();
-    const fg = new THREE.Color(cssVar('--fg')), red = new THREE.Color(cssVar('--accent'));
+    const fg = new THREE.Color(cssVar('--fg')), accent = new THREE.Color(cssVar('--accent'));
 
     // Each particle: where it starts in the galaxy (radius, angle, height), where it ends up in the word,
     // random numbers (when it sets off, twinkle phase, size, exit speed) and a colour
@@ -103,7 +103,7 @@
       const r = 0.1 + Math.random() ** 0.75 * 1.05;
       start.set([r, (i % 3) * 2.094 + r * 4.2 + (Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 0.06], i * 3);
       rand.set([i < PARTICLES ? Math.random() : 2, Math.random(), 0.6 + Math.random() * 0.8, Math.random()], i * 4);
-      const c = Math.random() < 0.16 ? red : fg; // a sprinkle of the accent red
+      const c = Math.random() < 0.16 ? accent : fg; // a sprinkle of the accent blue
       color.set([c.r, c.g, c.b], i * 3);
     }
     const geo = new THREE.BufferGeometry();
@@ -165,7 +165,7 @@
     const points = new THREE.Points(geo, mat);
     points.frustumCulled = false; // 'position' holds galaxy coordinates, not real positions
 
-    // A soft red glow behind the word
+    // A soft blue glow behind the word
     const glowCanvas = document.createElement('canvas');
     glowCanvas.width = glowCanvas.height = 128;
     const g2 = glowCanvas.getContext('2d');
@@ -176,7 +176,7 @@
     g2.fillRect(0, 0, 128, 128);
     const glowTex = new THREE.CanvasTexture(glowCanvas);
     const glow = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: glowTex, color: red, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending,
+      map: glowTex, color: accent, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending,
     }));
     glow.scale.set(1.5, 0.5, 1);
     glow.position.z = -0.3;

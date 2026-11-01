@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bryan Owusu-Ansah — Creative Developer</title>
+  <meta name="description" content="Portfolio of Bryan Owusu-Ansah, creative developer.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter+Tight:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<!-- ===== Welcome screen (see welcome.js): shown first, then it flies away and reveals the page =====
+     Edit the words here. The particle word is WORD at the top of welcome.js. -->
+<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcome-h" tabindex="-1">
+  <div class="welcome-bg"></div>
+  <canvas class="welcome-canvas" aria-hidden="true"></canvas>
+  <div class="welcome-copy">
+    <h2 class="welcome-title" id="welcome-h"><span class="sr-only">Welcome. </span>Hi, I’m <span class="welcome-name">Bryan Owusu-Ansah</span></h2>
+    <button type="button" class="welcome-enter">Enter the site</button>
+    <p class="welcome-hint mono">or scroll ↓</p>
+  </div>
+</div>
+
+<!-- ===== Menu (opened by the ☰ button in the header, see script.js) ===== -->
+<div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden data-lenis-prevent>
+  <button type="button" class="menu-close">Close
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13"/></svg>
+  </button>
+  <nav class="menu-nav" aria-label="Menu">
+    <a href="#works" style="--i: 0">Works</a>
+    <a href="#about" style="--i: 1">About</a>
+    <a href="#process" style="--i: 2">Process</a>
+    <a href="#contact" style="--i: 3">Contact</a>
+  </nav>
+  <div class="menu-foot mono">
+    <a href="#">Instagram</a>
+    <a href="#">GitHub</a>
+    <a href="#">LinkedIn</a>
+    <span class="muted">[YOUR EMAIL]</span>
+  </div>
+</div>
+
+<div id="top" class="page">
+
+  <canvas id="grain" class="grain" aria-hidden="true"></canvas>
+
+  <header class="site-header">
+    <a href="#top" class="logo"><img src="logo.png" alt="Bryan Owusu-Ansah" width="36" height="36"></a>
+    <nav aria-label="Primary" class="nav">
+      <a class="nav-link" href="#works">Works</a>
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#process">Process</a>
+    </nav>
+    <div class="header-end">
+      <a class="nav-contact" href="#contact">Contact</a>
+      <button type="button" class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M0 1h18M0 6h18M0 11h18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Scroll scene: the hero stays pinned while your name clears and About scrolls up over it (see script.js) -->
+  <div class="intro">
+    <section class="hero" aria-label="Intro">
+      <canvas id="scene" class="scene" role="img" aria-label="A rotating 3D knot made of drifting white particles that follows the cursor"></canvas>
+      <!-- Your name. script.js splits each line into letters and animates them. -->
+      <h1 class="headline">
+        <span class="headline-line">Bryan</span>
+        <span class="headline-line">Owusu-Ansah</span>
+      </h1>
+      <div class="hero-meta">
+        <span>Creative developer — [YOUR CITY]</span>
+        <span>Drag to spin · Scroll to explore ↓</span>
+      </div>
+    </section>
+
+    <section id="about" class="about" aria-labelledby="about-h">
+      <div class="about-text">
+        <h2 id="about-h" class="mono accent label">( About )</h2>
+        <p class="about-lead">I build loud, tactile websites where type, code and 3D collide. [A SENTENCE ABOUT YOUR FOCUS.]</p>
+      </div>
+      <div class="svc-grid">
+        <div class="svc-card"><span class="mono muted small">01</span><span class="svc-name">Creative dev</span></div>
+        <div class="svc-card"><span class="mono muted small">02</span><span class="svc-name">3D / WebGL</span></div>
+        <div class="svc-card"><span class="mono muted small">03</span><span class="svc-name">UI design</span></div>
+        <div class="svc-card"><span class="mono muted small">04</span><span class="svc-name">Motion</span></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>WebGL</span><span class="x">✕</span><span>Interaction</span><span class="x">✕</span><span>Motion</span><span class="x">✕</span><span>Art direction</span><span class="x">✕</span><span>Front-end</span><span class="x">✕</span>
+      <span>WebGL</span><span class="x">✕</span><span>Interaction</span><span class="x">✕</span><span>Motion</span><span class="x">✕</span><span>Art direction</span><span class="x">✕</span><span>Front-end</span><span class="x">✕</span>
+    </div>
+  </div>
+
+  <!-- ===== Selected works (pinned scroll showcase, see works.js) =====
+       The projects themselves live in the PROJECTS list at the top of works.js. -->
+  <section id="works" class="works" aria-labelledby="works-h">
+    <div class="works-stage">
+      <div class="w-top">
+        <h2 id="works-h" class="w-ui">Selected works</h2>
+        <p class="w-ui w-count" aria-hidden="true"><span class="w-count-now">01</span> / <span class="w-count-all">05</span></p>
+      </div>
+      <div class="w-glow" aria-hidden="true"></div>
+      <div class="w-frame" aria-hidden="true"></div>
+      <!-- works.js adds one scene per project here -->
+      <div class="w-bar" role="group" aria-label="Project chapters"></div>
+      <a class="w-cta" href="#">
+        <span class="w-cta-label">View project</span>
+        <span class="w-cta-btn" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M3.5 2H10v6.5"/></svg>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== Trusted by: replace the numbers and the logos (works/client-0X.svg) with your own ===== -->
+  <section class="clients" aria-labelledby="clients-h">
+    <div class="clients-stat">
+      <h2 id="clients-h" class="w-ui">Trusted by</h2>
+      <p class="clients-num">40+</p>
+      <p class="w-ui clients-what">Projects shipped</p>
+      <p class="clients-note">Studios, startups and brands. [ONE LINE ABOUT WHO YOU WORK WITH.]</p>
+    </div>
+    <ul class="clients-grid" role="list">
+      <li><img src="works/client-01.svg" alt="[Client 1]" loading="lazy" width="340" height="120"></li>
+      <li><img src="works/client-02.svg" alt="[Client 2]" loading="lazy" width="340" height="120"></li>
+      <li><img src="works/client-03.svg" alt="[Client 3]" loading="lazy" width="340" height="120"></li>
+      <li><img src="works/client-04.svg" alt="[Client 4]" loading="lazy" width="340" height="120"></li>
+      <li><img src="works/client-05.svg" alt="[Client 5]" loading="lazy" width="340" height="120"></li>
+      <li><img src="works/client-06.svg" alt="[Client 6]" loading="lazy" width="340" height="120"></li>
+      <li><img src="works/client-07.svg" alt="[Client 7]" loading="lazy" width="340" height="120"></li>
+      <li class="clients-you"><a href="#contact">You?</a></li>
+    </ul>
+  </section>
+
+  <!-- ===== One giant number that counts up: change 5 to your own years of experience ===== -->
+  <section class="years">
+    <span class="years-glow" aria-hidden="true"></span>
+    <span class="years-label w-ui">Years of</span>
+    <span class="years-num">5</span>
+    <span class="years-label w-ui">Experience</span>
+  </section>
+
+  <!-- ===== Process (scroll-driven 3D story, see process.js) =====
+       All the words are here, as real HTML: edit them freely. Keep "Secure by design" as two <span> lines. -->
+  <section class="process" id="process" aria-labelledby="process-h">
+    <div class="process-stage">
+      <canvas class="process-canvas" role="img" aria-label="A globe made of glowing dots. Scrolling dives into it and turns it into a blueprint grid where a wireframe server rack and laptop assemble piece by piece."></canvas>
+
+      <div class="p-intro">
+        <p class="p-label mono">The process</p>
+        <h2 class="p-title" id="process-h">
+          <span class="p-line"><span>I build secure</span></span>
+          <span class="p-line"><span>software end to end</span></span>
+          <span class="p-line"><span>— from idea to</span></span>
+          <span class="p-line"><span>production.</span></span>
+        </h2>
+      </div>
+
+      <div class="p-sides">
+        <p class="p-two"><span class="p-clip">Two sides</span></p>
+        <p class="p-side p-build"><span class="p-word">Build</span> <span class="p-cap mono">01 · Full stack</span></p>
+        <p class="p-side p-secure"><span class="p-word">Secure</span> <span class="p-cap mono">02 · Cybersecurity</span></p>
+      </div>
+
+      <ol class="p-steps" role="list">
+        <li class="p-step">
+          <span class="p-num mono">01 / 04 · Plan</span>
+          <h3>Plan &amp; Threat Model</h3>
+          <p>Requirements, data flows and a STRIDE threat model before the first line of code.</p>
+        </li>
+        <li class="p-step">
+          <span class="p-num mono">02 / 04 · Build</span>
+          <h3>Build: Frontend + API + Database</h3>
+          <p>A typed interface, a hardened API and a database that only gets the access it needs.</p>
+        </li>
+        <li class="p-step">
+          <span class="p-num mono">03 / 04 · Test</span>
+          <h3>Test &amp; Pentest</h3>
+          <p>Unit, integration and end-to-end tests, then I attack it the way an outsider would.</p>
+        </li>
+        <li class="p-step">
+          <span class="p-num mono">04 / 04 · Ship</span>
+          <h3>Ship &amp; Monitor</h3>
+          <p>CI/CD with security scans on every push, then logs, alerts and patches once it’s live.</p>
+        </li>
+      </ol>
+
+      <div class="p-outro">
+        <p class="p-label mono">Built to last</p>
+        <p class="p-final"><span>Secure</span> <span>by design</span></p>
+      </div>
+
+      <div class="p-progress">
+        <ol class="p-groups" role="list" aria-label="Jump to a stage">
+          <li><span class="p-blocks" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="p-go mono">Plan</button></li>
+          <li><span class="p-blocks" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="p-go mono">Build</button></li>
+          <li><span class="p-blocks" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="p-go mono">Test</button></li>
+          <li><span class="p-blocks" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" class="p-go mono">Ship</button></li>
+        </ol>
+        <a class="p-cta" href="#contact">Start a project ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact" aria-labelledby="contact-h">
+    <p class="mono muted upper">Got a weird idea?</p>
+    <h2 id="contact-h"><a class="contact-cta" href="mailto:you@example.com">Let’s talk</a></h2>
+    <p class="mono contact-mail">[YOUR EMAIL]</p>
+  </section>
+
+  <footer class="site-footer">
+    <div class="foot-row">
+      <div class="socials">
+        <a class="nav-link" href="#">Instagram</a>
+        <a class="nav-link" href="#">GitHub</a>
+        <a class="nav-link" href="#">LinkedIn</a>
+      </div>
+      <a class="btn-top" href="#top">Back to top</a>
+      <button type="button" id="motion-toggle" class="motion-toggle" aria-pressed="true">[ ..... Pause motion ]</button>
+    </div>
+    <div class="foot-bottom mono muted">
+      <span>© <span id="year"></span> Bryan Owusu-Ansah</span>
+      <span>Designed &amp; built by hand</span>
+    </div>
+  </footer>
+</div>
+
+<!-- three.js first, then the welcome screen, so its particles start straight away (the rest of the page loads behind it) -->
+<script src="vendor/three.min.js"></script>
+<script src="welcome.js"></script>
+<script src="script.js"></script>
+<script src="cursor.js"></script>
+<!-- GSAP + ScrollTrigger, Lenis smooth scrolling, then the scroll sections in page order: Works, then Process -->
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script src="smooth.js"></script>
+<script src="works.js"></script>
+<script src="scroll-fx.js"></script>
+<script src="process-land.js"></script>
+<script src="process.js"></script>
+</body>
+</html>

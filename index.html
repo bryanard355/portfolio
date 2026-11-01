@@ -7,8 +7,9 @@
   <meta name="description" content="Portfolio of Bryan Owusu-Ansah, creative developer.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter+Tight:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter+Tight:wght@500;600;700;800&family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="missions.css">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -142,6 +143,81 @@
     <span class="years-label w-ui">Experience</span>
   </section>
 
+  <!-- ===== Missions completed (pinned: the cards slide sideways as you scroll down, see missions.js) =====
+       PLACEHOLDERS: these five projects are samples. Replace them with your own, and add or remove cards freely.
+       data-visual on each canvas picks its animation: "wave" (a moving signal) or "network" (orbiting nodes). -->
+  <section class="missions" id="missions" aria-labelledby="missions-h">
+    <div class="m-head">
+      <div>
+        <p class="m-label">Selected work</p>
+        <h2 class="m-title" id="missions-h">Missions completed</h2>
+      </div>
+      <p class="m-count" aria-hidden="true">01 / 05</p>
+    </div>
+    <ul class="m-track" role="list">
+      <li class="m-card">
+        <div class="m-visual">
+          <canvas class="m-canvas" data-visual="wave" aria-hidden="true"></canvas>
+          <span class="m-tag">Full stack</span>
+          <span class="m-caption" aria-hidden="true">Vault · Encrypted</span>
+        </div>
+        <div class="m-body">
+          <div class="m-row"><h3 class="m-name">Secure Vault</h3><span class="m-year">2025</span></div>
+          <p class="m-desc">[Placeholder] An end-to-end encrypted file vault with zero-knowledge sharing links.</p>
+          <ul class="m-chips" role="list" aria-label="Tech stack"><li>React</li><li>Node.js</li><li>PostgreSQL</li><li>AES-256</li></ul>
+        </div>
+      </li>
+      <li class="m-card">
+        <div class="m-visual">
+          <canvas class="m-canvas" data-visual="network" aria-hidden="true"></canvas>
+          <span class="m-tag">Security</span>
+          <span class="m-caption" aria-hidden="true">Threats · 3 flagged</span>
+        </div>
+        <div class="m-body">
+          <div class="m-row"><h3 class="m-name">Threat Radar</h3><span class="m-year">2025</span></div>
+          <p class="m-desc">[Placeholder] A live map of a company’s attack surface that flags risky hosts as they appear.</p>
+          <ul class="m-chips" role="list" aria-label="Tech stack"><li>Python</li><li>Go</li><li>Elasticsearch</li></ul>
+        </div>
+      </li>
+      <li class="m-card">
+        <div class="m-visual">
+          <canvas class="m-canvas" data-visual="wave" aria-hidden="true"></canvas>
+          <span class="m-tag">DevSecOps</span>
+          <span class="m-caption" aria-hidden="true">Pipeline · 0 critical</span>
+        </div>
+        <div class="m-body">
+          <div class="m-row"><h3 class="m-name">Pipeline Guard</h3><span class="m-year">2024</span></div>
+          <p class="m-desc">[Placeholder] Security gates for CI/CD: dependency, secret and container scans on every push.</p>
+          <ul class="m-chips" role="list" aria-label="Tech stack"><li>GitHub Actions</li><li>Docker</li><li>Trivy</li></ul>
+        </div>
+      </li>
+      <li class="m-card">
+        <div class="m-visual">
+          <canvas class="m-canvas" data-visual="network" aria-hidden="true"></canvas>
+          <span class="m-tag">Security</span>
+          <span class="m-caption" aria-hidden="true">Pentest · 12 findings</span>
+        </div>
+        <div class="m-body">
+          <div class="m-row"><h3 class="m-name">Web App Pentest</h3><span class="m-year">2024</span></div>
+          <p class="m-desc">[Placeholder] A full web application pentest, with a prioritised fix plan the team shipped in two sprints.</p>
+          <ul class="m-chips" role="list" aria-label="Tech stack"><li>Burp Suite</li><li>OWASP ZAP</li><li>Kali</li></ul>
+        </div>
+      </li>
+      <li class="m-card">
+        <div class="m-visual">
+          <canvas class="m-canvas" data-visual="wave" aria-hidden="true"></canvas>
+          <span class="m-tag">Full stack</span>
+          <span class="m-caption" aria-hidden="true">Auth · MFA on</span>
+        </div>
+        <div class="m-body">
+          <div class="m-row"><h3 class="m-name">Auth Gateway</h3><span class="m-year">2023</span></div>
+          <p class="m-desc">[Placeholder] Single sign-on for internal tools, with passkeys, MFA and short-lived tokens.</p>
+          <ul class="m-chips" role="list" aria-label="Tech stack"><li>TypeScript</li><li>Next.js</li><li>Redis</li><li>OAuth 2.0</li></ul>
+        </div>
+      </li>
+    </ul>
+  </section>
+
   <!-- ===== Process (scroll-driven 3D story, see process.js) =====
        All the words are here, as real HTML: edit them freely. Keep "Secure by design" as two <span> lines. -->
   <section class="process" id="process" aria-labelledby="process-h">
@@ -232,13 +308,15 @@
 <script src="welcome.js"></script>
 <script src="script.js"></script>
 <script src="cursor.js"></script>
-<!-- GSAP + ScrollTrigger, Lenis smooth scrolling, then the scroll sections in page order: Works, then Process -->
+<!-- GSAP + ScrollTrigger, Lenis smooth scrolling, then the scroll sections in page order (their pins must be
+     set up top to bottom): Works, Trusted by + Years, Missions, then Process -->
 <script src="vendor/gsap.min.js"></script>
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 <script src="smooth.js"></script>
 <script src="works.js"></script>
 <script src="scroll-fx.js"></script>
+<script src="missions.js"></script>
 <script src="process-land.js"></script>
 <script src="process.js"></script>
 </body>

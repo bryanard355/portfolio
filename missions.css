@@ -1,0 +1,60 @@
+/* ===== Missions completed (missions.js) ===== */
+/* Without JS or GSAP, and with reduced motion: the heading, then the cards in a normal grid.
+   Once missions.js runs (.is-live): exactly one screen tall, the heading pinned at the top and the cards in one
+   sideways row that the scroll slides to the left. */
+.missions {
+  --m-bg: #000106; --m-card: rgba(3, 4, 13, .75); --m-line: #141a2b;
+  --m-muted: #6b7488; --m-text: #f2f5fb; --m-blue: #1e90ff; --m-orange: #ff6a2b; /* the orange is drawn in missions.js */
+  position: relative; padding: clamp(88px, 11vw, 160px) var(--gutter);
+  background: var(--m-bg); color: var(--m-text);
+}
+.m-label, .m-count, .m-tag, .m-caption, .m-year, .m-chips li {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace; font-weight: 500; text-transform: uppercase; letter-spacing: .12em;
+}
+
+/* Heading: label + title on the left, counter on the right */
+.m-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 48px; }
+.m-label { margin: 0; font-size: 11px; color: var(--m-blue); }
+.m-title { margin: 10px 0 0; font: 800 clamp(32px, 5.2vw, 84px)/.95 'Archivo', system-ui, sans-serif; letter-spacing: -.01em; }
+.m-count { margin: 0; font-size: 12px; color: var(--m-muted); white-space: nowrap; }
+.missions:not(.is-live) .m-count { display: none; } /* nothing to count without the sideways scroll */
+
+/* Cards */
+.m-track {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 28px;
+  margin: 0; padding: 0; list-style: none;
+}
+.m-card {
+  display: grid; grid-template-rows: auto 1fr; /* visual on top, text below */
+  border: 1px solid var(--m-line); background: var(--m-card);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  /* the hover lift uses translate, not transform: missions.js animates the cards' transform as they come in */
+  transition: border-color .3s, translate .4s cubic-bezier(.2, .7, .2, 1);
+}
+.m-card:hover { border-color: var(--m-blue); translate: 0 -6px; }
+
+.m-visual {
+  position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--m-line);
+  background: radial-gradient(circle at 70% 120%, rgba(30, 144, 255, .35), transparent 60%), #03040d;
+}
+.m-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.m-tag { position: absolute; top: 12px; left: 12px; padding: 4px 7px; background: var(--m-blue); color: #fff; font-size: 10px; line-height: 1.2; }
+.m-caption { position: absolute; left: 12px; bottom: 10px; color: #fff; font-size: 10px; }
+
+.m-body { display: flex; flex-direction: column; gap: 12px; padding: 20px; }
+.m-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.m-name { margin: 0; font: 800 26px/1.1 'Archivo', system-ui, sans-serif; }
+.m-year { flex: none; font-size: 11px; color: var(--m-muted); }
+.m-desc { margin: 0; font-size: 15px; line-height: 1.5; color: var(--m-muted); }
+.m-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 0; padding: 4px 0 0; list-style: none; } /* auto: chips line up along the bottom */
+.m-chips li { padding: 4px 7px; border: 1px solid var(--m-line); font-size: 10px; line-height: 1.2; }
+
+/* ===== Pinned, sideways (missions.js adds .is-live) ===== */
+/* min-height: on very short screens (a phone on its side) the heading and the cards would overlap */
+.missions.is-live { height: 100vh; height: 100svh; min-height: 560px; padding: 0; overflow: hidden; }
+.missions.is-live .m-head { position: absolute; top: 96px; left: var(--gutter); right: var(--gutter); margin: 0; }
+.missions.is-live .m-track {
+  position: absolute; top: 56%; left: 0; translate: 0 -50%; /* translate, not transform: GSAP slides the track with its transform */
+  display: flex; gap: 28px; width: max-content; padding-left: var(--gutter); will-change: transform;
+}
+.missions.is-live .m-card { flex: none; width: min(480px, 80vw); }

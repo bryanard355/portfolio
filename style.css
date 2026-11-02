@@ -6,7 +6,7 @@
   --muted: #8A93A6;
   --line: #252B3A;
   --gutter: clamp(16px, 4vw, 48px);
-  /* Selected works / clients / years (the tech-showcase look) */
+  /* Selected works / tech stack / years (the tech-showcase look) */
   --blue: #1E90FF;
   --ui-gray: #8A93A6;
   --seg-off: #1A1D24;
@@ -251,28 +251,34 @@ a { color: var(--fg); text-decoration: none; }
 .w-cta:hover .w-cta-btn { border-color: var(--blue); background: rgba(30, 144, 255, .12); }
 .w-cta:hover .w-cta-btn svg { transform: translate(2px, -2px); }
 
-/* ===== Trusted by ===== */
-.clients {
+/* ===== Tech stack ===== */
+/* Heading on the left, a grid of tool tiles on the right (stacked on smaller screens, see Responsive) */
+.tech {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: clamp(32px, 5vw, 80px); align-items: end;
   padding: clamp(88px, 11vw, 160px) var(--gutter) clamp(64px, 8vw, 120px); font-family: var(--wf);
 }
-.clients-num { margin: 18px 0 12px; font-weight: 800; font-size: clamp(72px, 10vw, 160px); line-height: .85; letter-spacing: -.05em; color: var(--fg); }
-.clients-what { color: var(--fg); }
-.clients-note { margin: 22px 0 0; max-width: 32ch; font-size: 15px; line-height: 1.5; color: var(--ui-gray); }
-.clients-grid {
-  list-style: none; margin: 0; padding: 1px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px;
+.tech-title {
+  margin: 18px 0 0; font-weight: 800; font-size: clamp(44px, 5.4vw, 88px); line-height: .9; letter-spacing: -.04em;
+  text-transform: uppercase; color: var(--fg);
 }
-/* each cell draws its own 1px outline (neighbours' outlines meet in the gap), so cells can fade in one by one */
-.clients-grid li { display: grid; place-items: center; aspect-ratio: 3 / 2; padding: 12%; outline: 1px solid var(--line); }
-.clients-grid img { width: 100%; height: auto; filter: grayscale(1); opacity: .5; transition: filter .4s, opacity .4s; }
-.clients-grid li:hover img { filter: none; opacity: 1; }
-.clients-grid .clients-you { padding: 0; }
-.clients-you a {
-  display: grid; place-items: center; width: 100%; height: 100%; color: var(--blue);
-  font-weight: 800; font-size: clamp(28px, 3.4vw, 52px); letter-spacing: -.03em; text-transform: uppercase;
-  transition: background-color .3s;
+.tech-note { margin: 22px 0 0; max-width: 32ch; font-size: 15px; line-height: 1.5; color: var(--ui-gray); }
+/* relative: scroll-fx.js measures each tile's place from the grid's own corner */
+.tech-grid { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+/* each tool: its logo over its name. Hover: the tile lifts with a blue edge and the name lights up
+   (translate, not transform: scroll-fx.js moves the tiles with their transform as they come in).
+   --edge: scroll-fx.js turns the edge blue while a tile is in the pile and on its way to its place */
+.tech-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  aspect-ratio: 1; padding: 10px; border: 1px solid var(--edge, #141a2b); background: #03040d;
+  transition: border-color .3s, translate .4s cubic-bezier(.2,.7,.2,1);
 }
-.clients-you a:hover { color: var(--blue); background: rgba(30, 144, 255, .1); }
+.tech-item img { width: clamp(30px, 3vw, 44px); height: clamp(30px, 3vw, 44px); object-fit: contain; }
+.tech-item span {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em; line-height: 1.2; text-transform: uppercase; text-align: center;
+  color: var(--ui-gray); transition: color .3s;
+}
+.tech-item:hover { border-color: var(--blue); translate: 0 -4px; }
+.tech-item:hover span { color: var(--fg); }
 
 /* ===== Years (one giant number) ===== */
 .years {
@@ -459,6 +465,10 @@ a { color: var(--fg); text-decoration: none; }
 .foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 12px; }
 
 /* ===== Responsive ===== */
+@media (max-width: 1000px) {
+  /* Tech stack: the heading above the tiles, so the tiles get the full width */
+  .tech { grid-template-columns: minmax(0, 1fr); align-items: start; }
+}
 @media (max-width: 767px) {
   /* Works on phones: headline on top, the visual under it, thin progress segments without labels */
   .works.is-live { --w-top: 46svh; --w-bottom: 132px; --w-side: var(--gutter); }
@@ -474,7 +484,7 @@ a { color: var(--fg); text-decoration: none; }
   .w-tab { display: none; }
   .w-seg { flex: 1; width: auto; height: 3px; }
   .is-live .w-cta { bottom: 18px; }
-  .clients { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .tech-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .site-header { grid-template-columns: minmax(0, 1fr) auto; }
@@ -482,12 +492,14 @@ a { color: var(--fg); text-decoration: none; }
   .foot-row { justify-content: flex-start; }
 }
 @media (max-width: 600px) {
-  .clients-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .years { flex-direction: column; gap: 12px; }
   .years-label, .years-glow + .years-label { flex: none; max-width: none; text-align: center; }
 }
 @media (max-width: 520px) {
   .nav-contact { display: none; }
+  .tech-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .tech-item { gap: 10px; }
+  .tech-item span { font-size: 10px; }
 }
 @media (max-width: 600px) {
   /* Phones: stack the name as BRYAN / OWUSU- / ANSAH so it can be bigger */

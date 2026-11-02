@@ -119,23 +119,30 @@
     </div>
   </section>
 
-  <!-- ===== Trusted by: replace the numbers and the logos (works/client-0X.svg) with your own ===== -->
-  <section class="clients" aria-labelledby="clients-h">
-    <div class="clients-stat">
-      <h2 id="clients-h" class="w-ui">Trusted by</h2>
-      <p class="clients-num">40+</p>
-      <p class="w-ui clients-what">Projects shipped</p>
-      <p class="clients-note">Studios, startups and brands. [ONE LINE ABOUT WHO YOU WORK WITH.]</p>
+  <!-- ===== Tech stack: one tile per tool. Add, remove or reorder the <li>s freely; the logos live in tech/
+       (any SVG or PNG works). The name next to each logo is what screen readers read, so the logos have alt="". ===== -->
+  <section class="tech" id="tech" aria-labelledby="tech-h">
+    <div class="tech-intro">
+      <p class="w-ui">Tech stack</p>
+      <h2 id="tech-h" class="tech-title">Tools I build with</h2>
+      <p class="tech-note">The languages, frameworks and platforms I use to take a product from database to deploy.</p>
     </div>
-    <ul class="clients-grid" role="list">
-      <li><img src="works/client-01.svg" alt="[Client 1]" loading="lazy" width="340" height="120"></li>
-      <li><img src="works/client-02.svg" alt="[Client 2]" loading="lazy" width="340" height="120"></li>
-      <li><img src="works/client-03.svg" alt="[Client 3]" loading="lazy" width="340" height="120"></li>
-      <li><img src="works/client-04.svg" alt="[Client 4]" loading="lazy" width="340" height="120"></li>
-      <li><img src="works/client-05.svg" alt="[Client 5]" loading="lazy" width="340" height="120"></li>
-      <li><img src="works/client-06.svg" alt="[Client 6]" loading="lazy" width="340" height="120"></li>
-      <li><img src="works/client-07.svg" alt="[Client 7]" loading="lazy" width="340" height="120"></li>
-      <li class="clients-you"><a href="#contact">You?</a></li>
+    <ul class="tech-grid" role="list">
+      <li class="tech-item"><img src="tech/react.svg" alt="" width="44" height="44" loading="lazy"><span>React</span></li>
+      <li class="tech-item"><img src="tech/javascript.svg" alt="" width="44" height="44" loading="lazy"><span>JavaScript</span></li>
+      <li class="tech-item"><img src="tech/html5.svg" alt="" width="44" height="44" loading="lazy"><span>HTML5</span></li>
+      <li class="tech-item"><img src="tech/css3.svg" alt="" width="44" height="44" loading="lazy"><span>CSS3</span></li>
+      <li class="tech-item"><img src="tech/fontawesome.svg" alt="" width="44" height="44" loading="lazy"><span>Font Awesome</span></li>
+      <li class="tech-item"><img src="tech/python.svg" alt="" width="44" height="44" loading="lazy"><span>Python</span></li>
+      <li class="tech-item"><img src="tech/php.svg" alt="" width="44" height="44" loading="lazy"><span>PHP</span></li>
+      <li class="tech-item"><img src="tech/mysql.svg" alt="" width="44" height="44" loading="lazy"><span>MySQL</span></li>
+      <li class="tech-item"><img src="tech/supabase.svg" alt="" width="44" height="44" loading="lazy"><span>Supabase</span></li>
+      <li class="tech-item"><img src="tech/firebase.svg" alt="" width="44" height="44" loading="lazy"><span>Firebase</span></li>
+      <li class="tech-item"><img src="tech/xampp.svg" alt="" width="44" height="44" loading="lazy"><span>XAMPP</span></li>
+      <li class="tech-item"><img src="tech/git.svg" alt="" width="44" height="44" loading="lazy"><span>Git</span></li>
+      <li class="tech-item"><img src="tech/github.svg" alt="" width="44" height="44" loading="lazy"><span>GitHub</span></li>
+      <li class="tech-item"><img src="tech/vite.svg" alt="" width="44" height="44" loading="lazy"><span>Vite</span></li>
+      <li class="tech-item"><img src="tech/vercel.svg" alt="" width="44" height="44" loading="lazy"><span>Vercel</span></li>
     </ul>
   </section>
 
@@ -331,7 +338,7 @@
 <script src="script.js"></script>
 <script src="cursor.js"></script>
 <!-- GSAP + ScrollTrigger, Lenis smooth scrolling, then the scroll sections in page order (their pins must be
-     set up top to bottom): Works, Trusted by + Years, the stack, Missions, then Process -->
+     set up top to bottom): Works, Tech stack + Years, the stack, Missions, then Process -->
 <script src="vendor/gsap.min.js"></script>
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>

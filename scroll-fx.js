@@ -1,8 +1,9 @@
 // ===== Scroll effects for the rest of the page =====
 // Everything here is scrubbed by the scrollbar: it moves while you scroll, stops when you stop, and plays
 // backwards when you scroll back up.
-// - Trusted by: "40+" rolls up like an odometer as the section comes in, the "+" pops on at the end, the client
-//   cells rise in one by one, and the two columns drift at different speeds.
+// - Tech stack: the heading rises in, then the tool tiles arrange themselves: they gather in one messy pile in the
+//   middle of the grid and deal out to their places one by one, each logo popping in as its tile lands. On wide
+//   screens the two columns drift at different speeds.
 // - Years: the section pins; the big number spins round once and lands on 5 while it grows and its glow brightens,
 //   then the labels slide in from both sides. It rises away and dims as you scroll on.
 // - Marquee: follows the scroll (speed and direction) on top of its own slow drift, and leans when you scroll fast.
@@ -90,30 +91,48 @@
   }
   const roll = (o) => ({ v: o.end, onUpdate: o.set });
 
-  // ===== Trusted by =====
-  const clients = document.querySelector('.clients');
-  if (clients) {
-    const stat = clients.querySelector('.clients-stat');
-    const num = clients.querySelector('.clients-num');
-    const grid = clients.querySelector('.clients-grid');
-    const cells = grid.querySelectorAll('li');
-    const o = odometer(num, false);
-    const tl = gsap.timeline({ scrollTrigger: { trigger: clients, start: 'top 85%', end: 'center 55%', scrub: 1 } });
-    tl.from(stat.querySelector('h2'), { y: 24, opacity: 0, duration: 0.2 }, 0)
-      .from(num, { yPercent: 40, opacity: 0, duration: 0.3, ease: 'power3.out' }, 0.04);
-    if (o) {
-      tl.to(o, { ...roll(o), duration: 0.75, ease: 'power2.out' }, 0.08);
-      if (o.fix) tl.from(o.fix, { scale: 0, opacity: 0, transformOrigin: '20% 75%', duration: 0.18, ease: 'back.out(3)' }, 0.72);
-      lean(o.odo, 1, { trigger: clients, start: 'top bottom', end: 'bottom top' });
+  // ===== Tech stack =====
+  const tech = document.querySelector('.tech');
+  if (tech) {
+    const intro = tech.querySelector('.tech-intro');
+    const grid = tech.querySelector('.tech-grid');
+    const tiles = [...grid.querySelectorAll('.tech-item')];
+    // One tween per element rather than a stagger: in a scrubbed timeline only a stagger's first element gets its
+    // start state up front, so the others would sit in place until their turn and then jump.
+    const head = gsap.timeline({ scrollTrigger: { trigger: tech, start: 'top 85%', end: 'top 35%', scrub: 1 } });
+    [...intro.children].forEach((el, i) => head.fromTo(el, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3 }, i * 0.08));
+
+    // How far a tile has to travel to the middle of the grid, from where it sits in the layout (offsetLeft/Top
+    // ignore its own animation). Function values below, so a resize measures again.
+    const toMiddle = (el) => ({
+      x: grid.clientWidth / 2 - (el.offsetLeft + el.offsetWidth / 2),
+      y: grid.clientHeight / 2 - (el.offsetTop + el.offsetHeight / 2),
+    });
+    // In the pile each tile lies a little off-centre and turned, the first ones on top (so they're dealt first)
+    const mess = tiles.map(() => ({ x: gsap.utils.random(-16, 16), y: gsap.utils.random(-16, 16), r: gsap.utils.random(-24, 24) }));
+    gsap.set(tiles, { zIndex: (i) => tiles.length - i });
+    const deal = gsap.timeline({
+      scrollTrigger: { trigger: grid, start: 'top 85%', end: 'center 45%', scrub: 1, invalidateOnRefresh: true },
+    });
+    tiles.forEach((tile, i) => {
+      const m = mess[i], go = 0.3 + i * 0.035, land = go + 0.4;
+      // 1. rises into the pile, its edge lit blue
+      deal.fromTo(tile, {
+        x: () => toMiddle(tile).x + m.x, y: () => toMiddle(tile).y + m.y + 120, rotation: m.r * 2, scale: 0.5, opacity: 0,
+        '--edge': 'rgba(30, 144, 255, 0.8)',
+      }, { y: () => toMiddle(tile).y + m.y, rotation: m.r, scale: 0.72, opacity: 1, duration: 0.14, ease: 'power2.out' }, i * 0.012)
+        // 2. dealt out to its place, straightening as it goes; the edge dims back to a hairline as it lands
+        .to(tile, { x: 0, y: 0, rotation: 0, scale: 1, '--edge': 'rgba(20, 26, 43, 1)', duration: 0.45, ease: 'power3.inOut' }, go)
+        // 3. as it lands, the logo spins in and the name fades up
+        .from(tile.querySelector('img'), { scale: 0.3, rotation: -40, duration: 0.2, ease: 'back.out(2.5)' }, land)
+        .from(tile.querySelector('span'), { y: 8, opacity: 0, duration: 0.15 }, land + 0.04);
+    });
+    // depth: side by side (wide screens), the two columns travel at different speeds the whole way through
+    if (window.matchMedia('(min-width: 1001px)').matches) {
+      const drift = { trigger: tech, start: 'top bottom', end: 'bottom top', scrub: true };
+      gsap.fromTo(intro, { y: 70 }, { y: -70, ease: 'none', scrollTrigger: drift });
+      gsap.fromTo(grid, { y: 30 }, { y: -30, ease: 'none', scrollTrigger: { ...drift } });
     }
-    tl.from(stat.querySelectorAll('.clients-what, .clients-note'), { y: 24, opacity: 0, duration: 0.25, stagger: 0.08 }, 0.5)
-      .from(cells, { y: 60, opacity: 0, duration: 0.35, stagger: 0.06, ease: 'power3.out' }, 0.12)
-      .from(grid.querySelectorAll('img'), { scale: 0.8, duration: 0.35, stagger: 0.06, ease: 'power3.out' }, 0.12)
-      .from(clients.querySelector('.clients-you a'), { scale: 0.6, duration: 0.3, ease: 'back.out(2)' }, 0.58);
-    // depth: the two columns travel at different speeds the whole way through
-    const drift = { trigger: clients, start: 'top bottom', end: 'bottom top', scrub: true };
-    gsap.fromTo(stat, { y: 70 }, { y: -70, ease: 'none', scrollTrigger: drift });
-    gsap.fromTo(grid, { y: 30 }, { y: -30, ease: 'none', scrollTrigger: { ...drift } });
   }
 
   // ===== Years =====

@@ -18,8 +18,9 @@
       description: '[Two or three lines about the project: the brief, what you built and the result.]',
     },
     {
-      title: 'Online\nstore', subtitle: 'E-commerce · [YEAR]', chapter: 'Web', align: 'right', link: '#',
-      image: 'works/online-store.svg', alt: 'Product grid of an online shop',
+      title: 'MediCore', subtitle: 'Web app · [YEAR]', chapter: 'Web', align: 'right', link: '#',
+      image: 'works/medicore.png', alt: 'MediCore admin dashboard: revenue chart, patient and appointment stats and a weekly calendar',
+      description: 'A hospital admin console that brings patients, staff, appointments, records and supplies into one dashboard, with revenue and analytics at a glance.',
     },
     {
       title: 'Brand\nredesign', subtitle: 'Brand + web · [YEAR]', chapter: 'Branding', align: 'center', link: '#',

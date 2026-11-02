@@ -272,13 +272,14 @@ function renderName(now) {
 
 // ===== Scroll: your name clears, then About rises up over the pinned hero =====
 const intro = document.querySelector('.intro');
-const heroMeta = document.querySelector('.hero-meta');
 const clamp01 = (n) => Math.min(Math.max(n, 0), 1);
 let clear = 0; // how far the name has cleared: 0 = all there, 1 = gone (eases after the scroll position)
 
-// Every About word sits in a mask and rises out of it as it scrolls into view; the cards fade up
+// The About label slides in from the left, every word of the big text sits in a mask and rises out of it as it
+// scrolls into view, and the cards fade up
 const reveals = [];
-document.querySelectorAll('.about .label, .about-lead').forEach((block) => {
+document.querySelectorAll('.about .label').forEach((el) => reveals.push({ box: el, el, slide: true, top: 0, x: 0, shown: -1 }));
+document.querySelectorAll('.about-lead').forEach((block) => {
   const words = block.textContent.trim().split(/\s+/);
   block.textContent = '';
   words.forEach((word, i) => {
@@ -293,6 +294,18 @@ document.querySelectorAll('.about .label, .about-lead').forEach((block) => {
   });
 });
 document.querySelectorAll('.svc-card').forEach((el) => reveals.push({ box: el, el, fade: true, top: 0, x: 0, shown: -1 }));
+// The paragraph under it starts dim and lights up word by word, in reading order, as it scrolls up the screen
+document.querySelectorAll('.about-more').forEach((block) => {
+  const words = block.textContent.trim().split(/\s+/);
+  block.textContent = '';
+  words.forEach((word, i) => {
+    if (i) block.append(' ');
+    const el = document.createElement('span');
+    el.textContent = word;
+    block.append(el);
+    reveals.push({ box: el, el, light: true, top: 0, x: 0, shown: -1 });
+  });
+});
 
 let introTop = 0, revealDirty = true, lastScroll = '';
 fontsIn.then(() => { revealDirty = true; }); // the font changes where the text wraps
@@ -317,18 +330,24 @@ function renderScroll() {
   const key = `${y} ${vh} ${motion}`;
   if (key === lastScroll) return; // nothing else changes until the page scrolls
   lastScroll = key;
-  heroMeta.style.opacity = 1 - clamp01(y / (vh * 0.25));
   headline.style.opacity = motion ? '' : 1 - p; // with motion paused the name simply fades
   scene.style.opacity = 1 - 0.6 * clamp01((y - vh * 0.25) / (vh * 0.75)); // dim the knot behind About
   for (const r of reveals) {
-    // Rises in while travelling from 92% to 72% of the screen height (words further right a touch later)
-    const t = motion ? Math.round(clamp01((vh * 0.92 - (r.top - scrollY) - r.x * 0.05) / (vh * 0.2)) * 100) / 100 : 1;
+    // Rises in while travelling from 92% to 72% of the screen height (words further right a touch later).
+    // The lit words take longer, from 85% to 55%, and further right is a lot later, so they light up in reading order.
+    const at = r.light ? (vh * 0.85 - (r.top - scrollY) - r.x * 0.3) / (vh * 0.3) : (vh * 0.92 - (r.top - scrollY) - r.x * 0.05) / (vh * 0.2);
+    const t = motion ? Math.round(clamp01(at) * 100) / 100 : 1;
     if (t === r.shown) continue;
     r.shown = t;
     const e = 1 - (1 - t) ** 3;
-    if (r.fade) {
+    if (r.light) {
+      r.el.style.opacity = t < 1 ? (0.16 + 0.84 * t).toFixed(2) : '';
+    } else if (r.fade) {
       r.el.style.opacity = e;
       r.el.style.translate = `0 ${(1 - e) * 40}px`;
+    } else if (r.slide) {
+      r.el.style.opacity = e;
+      r.el.style.translate = `${(e - 1) * 80}px 0`;
     } else {
       r.el.style.translate = `0 ${(1 - e) * 110}%`;
     }

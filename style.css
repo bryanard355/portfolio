@@ -131,12 +131,6 @@ a { color: var(--fg); text-decoration: none; }
 /* Hidden until script.js starts the intro; shown anyway after 3s if the script never runs */
 .js .hero:not(.is-in) .headline { visibility: hidden; animation: reveal 0s 3s forwards; }
 @keyframes reveal { to { visibility: visible; } }
-.hero-meta {
-  position: absolute; z-index: 2; left: 0; right: 0; bottom: 28px;
-  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px;
-  padding: 0 var(--gutter); font-family: 'Space Mono', monospace; font-size: 12px;
-  text-transform: uppercase; color: var(--muted);
-}
 
 /* ===== Marquee ===== */
 .marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; padding: 18px 0; white-space: nowrap; }
@@ -318,6 +312,7 @@ a { color: var(--fg); text-decoration: none; }
 .about-text, .svc-grid { flex: 1 1 320px; min-width: 0; }
 .label { margin: 0 0 24px; font-size: 13px; font-weight: 400; text-transform: uppercase; }
 .about-lead { margin: 0; font-weight: 800; font-stretch: 112%; font-size: clamp(26px, 3.4vw, 52px); line-height: 1.05; text-transform: uppercase; }
+.about-more { margin: clamp(20px, 2.4vw, 32px) 0 0; max-width: 38ch; font-size: clamp(17px, 1.5vw, 22px); font-weight: 500; line-height: 1.5; }
 .svc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-content: end; }
 .svc-card { border: 1px solid var(--line); background: var(--bg); padding: 24px; display: flex; flex-direction: column; gap: 32px; transition: border-color .3s; }
 .svc-card:hover { border-color: var(--accent); }

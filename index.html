@@ -5,11 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bryan Owusu-Ansah — Creative Developer</title>
   <meta name="description" content="Portfolio of Bryan Owusu-Ansah, creative developer.">
+  <!-- Tab icon (and the icon Google shows next to the site in search results): the logo's mark on a transparent background.
+       favicon.svg is used where supported (it adapts to light and dark tabs); favicon.png is the fallback.
+       "Add to Home Screen" keeps the full logo with its black square, since phones fill transparency with black anyway. -->
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter+Tight:wght@500;600;700;800&family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="missions.css">
+  <link rel="stylesheet" href="stack.css">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -40,8 +47,6 @@
 </div>
 
 <div id="top" class="page">
-
-  <canvas id="grain" class="grain" aria-hidden="true"></canvas>
 
   <header class="site-header">
     <a href="#top" class="logo"><img src="logo.png" alt="Bryan Owusu-Ansah" width="36" height="36"></a>
@@ -141,6 +146,21 @@
     <span class="years-label w-ui">Years of</span>
     <span class="years-num">5</span>
     <span class="years-label w-ui">Experience</span>
+  </section>
+
+  <!-- ===== The stack (pinned: giant words slide past behind the heading, see stack.js) =====
+       Sample copy: edit the words, the heading and the paragraph freely. The word with class="is-outline" is drawn
+       as a blue outline. -->
+  <section class="stack" id="stack" aria-labelledby="stack-h">
+    <div class="s-row" aria-hidden="true">
+      <span>Frontend</span><span>Backend</span><span class="is-outline">Security</span><span>Cloud</span><span>DevOps</span>
+    </div>
+    <div class="s-center">
+      <p class="s-label">( The stack )</p>
+      <h2 class="s-title" id="stack-h"><span class="s-line">Every layer.</span> <span class="s-line">One developer.</span></h2>
+      <span class="s-bar" aria-hidden="true"><span></span></span>
+      <p class="s-text">Interfaces, APIs, databases, pipelines and the security that holds them together: I design, build and ship all of it myself.</p>
+    </div>
   </section>
 
   <!-- ===== Missions completed (pinned: the cards slide sideways as you scroll down, see missions.js) =====
@@ -309,13 +329,14 @@
 <script src="script.js"></script>
 <script src="cursor.js"></script>
 <!-- GSAP + ScrollTrigger, Lenis smooth scrolling, then the scroll sections in page order (their pins must be
-     set up top to bottom): Works, Trusted by + Years, Missions, then Process -->
+     set up top to bottom): Works, Trusted by + Years, the stack, Missions, then Process -->
 <script src="vendor/gsap.min.js"></script>
 <script src="vendor/ScrollTrigger.min.js"></script>
 <script src="vendor/lenis.min.js"></script>
 <script src="smooth.js"></script>
 <script src="works.js"></script>
 <script src="scroll-fx.js"></script>
+<script src="stack.js"></script>
 <script src="missions.js"></script>
 <script src="process-land.js"></script>
 <script src="process.js"></script>

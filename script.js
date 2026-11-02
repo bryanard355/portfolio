@@ -8,8 +8,6 @@ const RIPPLE_LIFE = 1.4;  // seconds
 // ===== Elements =====
 const scene = document.getElementById('scene');
 const ctx = scene.getContext('2d');
-const grain = document.getElementById('grain');
-const gctx = grain.getContext('2d');
 const toggle = document.getElementById('motion-toggle');
 const hero = document.querySelector('.hero');
 const headline = document.querySelector('.headline');
@@ -116,24 +114,6 @@ function renderScene(now) {
     }
     ctx.fill();
   }
-}
-
-// ===== Film grain =====
-const tile = document.createElement('canvas');
-tile.width = tile.height = 160;
-const tctx = tile.getContext('2d');
-function drawGrain() {
-  const w = Math.ceil(grain.clientWidth / 2), h = Math.ceil(grain.clientHeight / 2);
-  if (grain.width !== w || grain.height !== h) { grain.width = w; grain.height = h; }
-  const img = tctx.createImageData(160, 160);
-  for (let i = 0; i < img.data.length; i += 4) {
-    const v = Math.random() * 255;
-    img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
-    img.data[i + 3] = 255;
-  }
-  tctx.putImageData(img, 0, 0);
-  gctx.fillStyle = gctx.createPattern(tile, 'repeat');
-  gctx.fillRect(0, 0, w, h);
 }
 
 // ===== Name: split into letters =====
@@ -376,7 +356,6 @@ if (menuBtn && menu) {
 }
 
 // ===== Main loop =====
-let frame = 0;
 let covered = !!window.welcomeDone; // the hero is hidden behind the welcome screen: no need to draw it yet
 welcomeDone.then(() => { covered = false; });
 function loop(now) {
@@ -387,14 +366,12 @@ function loop(now) {
     renderScene(now);
     renderName(now);
   }
-  if (frame++ % 3 === 0) drawGrain();
 }
 renderScene(performance.now());
-drawGrain();
 requestAnimationFrame(loop);
 
 window.addEventListener('resize', () => {
-  renderScene(performance.now()); drawGrain(); nameDirty = true; revealDirty = true;
+  renderScene(performance.now()); nameDirty = true; revealDirty = true;
 });
 
 // ===== Motion toggle =====

@@ -165,16 +165,18 @@
     const points = new THREE.Points(geo, mat);
     points.frustumCulled = false; // 'position' holds galaxy coordinates, not real positions
 
-    // A soft blue glow behind the word
-    const glowCanvas = document.createElement('canvas');
-    glowCanvas.width = glowCanvas.height = 128;
-    const g2 = glowCanvas.getContext('2d');
-    const grad = g2.createRadialGradient(64, 64, 0, 64, 64, 64);
-    grad.addColorStop(0, 'rgba(255,255,255,1)');
-    grad.addColorStop(1, 'rgba(255,255,255,0)');
-    g2.fillStyle = grad;
-    g2.fillRect(0, 0, 128, 128);
-    const glowTex = new THREE.CanvasTexture(glowCanvas);
+    // A soft blue glow behind the word: a white radial fade, worked out pixel by pixel rather than drawn on a
+    // 2D canvas (Safari's anti-fingerprinting noise on canvas pixels shows up as coloured specks in its faint edge)
+    const G = 128, glowData = new Uint8Array(G * G * 4).fill(255);
+    for (let y = 0; y < G; y++) {
+      for (let x = 0; x < G; x++) {
+        const d = Math.hypot(x + 0.5 - G / 2, y + 0.5 - G / 2) / (G / 2);
+        glowData[(y * G + x) * 4 + 3] = Math.round(Math.max(0, 1 - d) * 255);
+      }
+    }
+    const glowTex = new THREE.DataTexture(glowData, G, G);
+    glowTex.magFilter = glowTex.minFilter = THREE.LinearFilter;
+    glowTex.needsUpdate = true;
     const glow = new THREE.Sprite(new THREE.SpriteMaterial({
       map: glowTex, color: accent, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending,
     }));

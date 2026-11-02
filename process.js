@@ -52,15 +52,30 @@
   };
   let time = 0; // seconds of idle motion; stands still while "Pause motion" is on
 
-  function radialTexture(stops) { // white radial gradient, used for round dots and the halo
-    const c = document.createElement('canvas');
-    c.width = c.height = 128;
-    const g = c.getContext('2d');
-    const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    for (const [at, alpha] of stops) grad.addColorStop(at, `rgba(255,255,255,${alpha})`);
-    g.fillStyle = grad;
-    g.fillRect(0, 0, 128, 128);
-    return new THREE.CanvasTexture(c);
+  // White radial gradient, used for round dots and the halo. stops: [[distance from the centre 0–1, alpha], ...].
+  // Worked out pixel by pixel rather than drawn on a 2D canvas: Safari adds anti-fingerprinting noise to canvas
+  // pixels, which turns the faint edge of a canvas gradient into coloured specks once the halo is stretched big.
+  function radialTexture(stops) {
+    const N = 128, data = new Uint8Array(N * N * 4).fill(255);
+    const alphaAt = (d) => {
+      for (let i = 1; i < stops.length; i++) {
+        const [a, va] = stops[i - 1], [b, vb] = stops[i];
+        if (d <= b) return d <= a ? va : va + (vb - va) * ((d - a) / (b - a));
+      }
+      return stops[stops.length - 1][1];
+    };
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < N; x++) {
+        const d = Math.hypot(x + 0.5 - N / 2, y + 0.5 - N / 2) / (N / 2);
+        data[(y * N + x) * 4 + 3] = Math.round(alphaAt(d) * 255);
+      }
+    }
+    const tex = new THREE.DataTexture(data, N, N);
+    tex.magFilter = THREE.LinearFilter;
+    tex.minFilter = THREE.LinearMipmapLinearFilter;
+    tex.generateMipmaps = true;
+    tex.needsUpdate = true;
+    return tex;
   }
 
   // ===== Globe: dots on a sphere (bright on land, sparse and faint on the ocean) with a glowing rim =====

@@ -37,16 +37,8 @@ a { color: var(--fg); text-decoration: none; }
 .small { font-size: 12px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* ===== Film grain overlay ===== */
-/* overlay, not screen: overlay leaves pure black untouched, so the background stays black and only content gets grain */
-.grain {
-  position: fixed; inset: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 50; opacity: .12; mix-blend-mode: overlay;
-}
-
 /* ===== Welcome screen (welcome.js) ===== */
-/* Covers the page for a moment when it loads; it sits just under the grain so the film texture covers it too.
-   Only shown when JS runs, and if welcome.js never starts it hides itself after 3s so the page can't get stuck. */
+/* Covers the page for a moment when it loads. Only shown when JS runs, and if welcome.js never starts it hides itself after 3s so the page can't get stuck. */
 .welcome { display: none; }
 .js .welcome { display: block; position: fixed; inset: 0; z-index: 40; overflow: hidden; }
 .js .welcome[hidden] { display: none; }
@@ -330,6 +322,14 @@ a { color: var(--fg); text-decoration: none; }
 .svc-card { border: 1px solid var(--line); background: var(--bg); padding: 24px; display: flex; flex-direction: column; gap: 32px; transition: border-color .3s; }
 .svc-card:hover { border-color: var(--accent); }
 .svc-name { font-weight: 800; font-stretch: 125%; font-size: 18px; text-transform: uppercase; }
+.svc-card > * { transition: color .3s; }
+/* with a mouse: the names sit dim until you point at one, then it lights up and its number turns blue
+   (touch screens have no hover, so there they stay white) */
+@media (hover: hover) {
+  .svc-name { color: var(--muted); }
+  .svc-card:hover .svc-name { color: var(--fg); }
+  .svc-card:hover .mono { color: var(--accent); }
+}
 
 /* ===== Process (scroll-driven 3D story, see process.js) ===== */
 /* By default (no JS, reduced motion, no WebGL) this is a plain stacked section. process.js adds
@@ -447,8 +447,13 @@ a { color: var(--fg); text-decoration: none; }
   font-size: 13px; font-weight: 700; font-stretch: 125%; text-transform: uppercase;
 }
 .socials { display: flex; flex-wrap: wrap; gap: 8px 28px; }
-.btn-top { background: var(--accent); color: var(--bg); padding: 12px 16px; transition: background .25s; }
-.btn-top:hover { background: var(--fg); color: var(--bg); }
+/* on hover a white fill wipes across it from the left, and leaves to the right */
+.btn-top { position: relative; isolation: isolate; background: var(--accent); color: var(--bg); padding: 12px 16px; }
+.btn-top::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; background: var(--fg);
+  transform: scaleX(0); transform-origin: right; transition: transform .45s cubic-bezier(.7,0,.2,1);
+}
+.btn-top:hover::before { transform: scaleX(1); transform-origin: left; }
 .motion-toggle {
   background: none; border: 0; color: var(--fg); font-family: 'Space Mono', monospace; font-size: 13px;
   cursor: pointer; padding: 12px 0; min-height: 44px;
@@ -494,10 +499,11 @@ a { color: var(--fg); text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .marquee-track, .is-in .char, .menu-nav a { animation: none; }
+  .btn-top::before { transition: none; }
 }
 
 /* ===== Goo cursor (cursor.js) ===== */
-/* One fixed layer above everything (the grain sits at 50): never catches clicks, and inverts what the blobs cover */
+/* One fixed layer above everything: never catches clicks, and inverts what the blobs cover */
 .goo-cursor-layer {
   position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2147483647;
   mix-blend-mode: difference; filter: url(#goo-cursor-filter);

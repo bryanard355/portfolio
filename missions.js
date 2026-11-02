@@ -1,6 +1,6 @@
 // ===== Missions completed: a pinned section whose cards slide sideways as you scroll down =====
 // Arriving (scrubbed by the scroll, so it plays backwards on the way up): a blue light line opens across the top of
-// the section, the label decrypts itself and the heading rises word by word.
+// the section and the label decrypts itself. The heading itself is always there.
 // Pinned: the section pins for as long as the row of cards is wide, the scroll slides the row to the left and the
 // counter follows.
 // The cards move with the scroll the whole way, rising up the screen at first and then sliding in from the right:
@@ -275,21 +275,7 @@
   // the row's layout width: scrollWidth would also count the cards' own animation (shifted right, turned)
   const rowWidth = () => track.offsetWidth;
 
-  // The heading, one masked word at a time (it keeps its name for screen readers)
   const label = section.querySelector('.m-label');
-  const title = section.querySelector('.m-title');
-  const titleText = title.textContent.trim();
-  title.setAttribute('aria-label', titleText);
-  title.replaceChildren();
-  const words = titleText.split(/\s+/).map((word, i) => {
-    const mask = make('span', 'm-word');
-    mask.setAttribute('aria-hidden', 'true');
-    const inner = make('span', null, word);
-    mask.append(inner);
-    if (i) title.append(' ');
-    title.append(mask);
-    return inner;
-  });
   // The light line along the top edge and the glow under it
   const glow = make('span', 'm-glow'), edge = make('span', 'm-edge');
   glow.setAttribute('aria-hidden', 'true');
@@ -300,9 +286,7 @@
 
   // Arriving: over the screen of scrolling that brings the section up to the top. gsap.from / fromTo set the
   // start states here, so without JS everything is simply there.
-  // One tween per word rather than a stagger: in a scrubbed timeline only a stagger's first element gets its
-  // start state up front, so the others would sit in place until their turn and then jump.
-  const arrive = gsap.timeline({
+  gsap.timeline({
     defaults: { ease: 'power3.out' },
     scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: 1 },
   })
@@ -311,9 +295,6 @@
     .fromTo(glow, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'none' }, 0.1)
     .to(said, { p: 1, duration: 0.3, ease: 'none', onUpdate: () => decrypt(label, said.p) }, 0.08)
     .from(count, { opacity: 0, x: 24, duration: 0.25 }, 0.45);
-  words.forEach((word, i) => {
-    arrive.from(word, { yPercent: 120, rotate: 6, transformOrigin: '0% 100%', duration: 0.4 }, 0.14 + i * 0.1);
-  });
 
   // Pinned: the scroll slides the row left until the last card is in. Function values, so a resize measures again.
   gsap.timeline({

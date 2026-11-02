@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="212.5 222 600 600">
+  <!-- The tab icon: logo.png's mark with no background. On a light tab the white bar turns dark so it stays visible. -->
+  <style>
+    .bar { fill: #F2F5FB; }
+    @media (prefers-color-scheme: light) { .bar { fill: #000106; } }
+  </style>
+  <path class="bar" d="M231 440L279 392L386 499L338 547Z"/>
+  <path fill="#1E90FF" d="M231 590L280 541L403.5 665.5L743.5 286L794 332L412 758L399 758Z"/>
+</svg>

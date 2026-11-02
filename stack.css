@@ -1,0 +1,39 @@
+/* ===== The stack (stack.js) ===== */
+/* Without JS or GSAP, and with reduced motion: one still screen, the heading centred over a row of giant faint words.
+   Once stack.js runs (.is-live) the section is exactly one screen tall, pins, and the row slides past behind it. */
+.stack {
+  --s-line: #141a2b; --s-text: #f2f5fb; --s-blue: #1e90ff; --s-orange: #ff6a2b;
+  position: relative; display: grid; place-items: center;
+  min-height: 100vh; min-height: 100svh; padding: 96px var(--gutter);
+  overflow: hidden; background: var(--bg); color: var(--s-text); text-align: center;
+}
+
+/* The row runs across the middle, behind the heading. It's decoration (aria-hidden), so it can run off the edge. */
+.s-row {
+  position: absolute; top: 50%; left: 0; translate: 0 -50%; /* translate, not transform: GSAP slides it with its transform */
+  display: flex; gap: .3em; width: max-content; padding-left: var(--gutter);
+  pointer-events: none; user-select: none; white-space: nowrap;
+  font: 900 clamp(120px, 26vw, 420px)/.88 'Archivo', system-ui, sans-serif; font-stretch: 80%;
+  letter-spacing: -.02em; text-transform: uppercase; color: rgba(242, 245, 251, .06);
+}
+.s-row .is-outline { color: transparent; -webkit-text-stroke: 1.5px rgba(30, 144, 255, .6); }
+.stack.is-live .s-row { will-change: transform; }
+
+.s-center { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: min(100%, 1100px); }
+.s-label {
+  margin: 0 0 20px; font: 500 11px 'IBM Plex Mono', ui-monospace, monospace;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--s-orange);
+}
+.s-title {
+  margin: 0; font-weight: 900; font-stretch: 80%; font-size: clamp(40px, 8vw, 132px); line-height: .88;
+  letter-spacing: -.01em; text-transform: uppercase;
+}
+.s-line { display: block; }
+/* The bar under the heading: a hairline that fills with blue from the left */
+.s-bar { display: block; width: min(100%, 520px); height: 3px; margin: clamp(28px, 4vw, 48px) 0; background: var(--s-line); }
+.s-bar > span { display: block; height: 100%; background: var(--s-blue); transform-origin: left; }
+.s-text { margin: 0; max-width: 40ch; font-size: clamp(16px, 1.5vw, 21px); font-weight: 500; line-height: 1.5; }
+
+/* ===== Pinned (stack.js adds .is-live) ===== */
+/* min-height: on very short screens (a phone on its side) the text would otherwise run out of the section */
+.stack.is-live { height: 100vh; height: 100svh; min-height: 520px; }

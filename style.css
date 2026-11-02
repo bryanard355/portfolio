@@ -438,7 +438,10 @@ a { color: var(--fg); text-decoration: none; }
   transition: transform .4s cubic-bezier(.2,.7,.2,1);
 }
 .contact-cta:hover { color: var(--accent); transform: skewX(-6deg); }
-.contact-mail { margin: 24px 0 0; font-size: 14px; }
+/* email and phone side by side, stacked when they don't fit on one line */
+.contact-mail { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 28px; margin: 24px 0 0; font-size: 14px; }
+.contact-mail a { padding: 6px 0; transition: color .25s; }
+.contact-mail a:hover { color: var(--accent); }
 
 /* ===== Footer ===== */
 .site-footer { padding: 32px var(--gutter) 28px; display: flex; flex-direction: column; gap: 28px; }
